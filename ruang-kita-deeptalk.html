@@ -1,0 +1,496 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#fff4f1" />
+  <title>Ruang Kita — Deep Talk</title>
+  <style>
+    :root {
+      --bg: #fff8f5;
+      --paper: #ffffff;
+      --ink: #493b42;
+      --muted: #88777f;
+      --pink: #e98fa5;
+      --pink-dark: #c96d87;
+      --pink-soft: #ffe8ed;
+      --peach: #fff0e5;
+      --line: #f2dfe3;
+      --green: #789d88;
+      --shadow: 0 16px 45px rgba(143, 91, 108, .09);
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      color: var(--ink);
+      background:
+        radial-gradient(circle at 8% 5%, rgba(255, 219, 226, .65), transparent 25rem),
+        radial-gradient(circle at 95% 30%, rgba(255, 236, 218, .65), transparent 23rem),
+        var(--bg);
+      font-family: ui-rounded, "Segoe UI", system-ui, -apple-system, sans-serif;
+      line-height: 1.6;
+    }
+
+    button, textarea { font: inherit; }
+    button { cursor: pointer; }
+    .wrap { width: min(960px, calc(100% - 32px)); margin: 0 auto; padding: 28px 0 55px; }
+    .hero {
+      position: relative;
+      overflow: hidden;
+      padding: 38px 30px 32px;
+      text-align: center;
+      border: 1px solid rgba(242, 223, 227, .9);
+      border-radius: 28px;
+      background: rgba(255,255,255,.84);
+      box-shadow: var(--shadow);
+    }
+    .hero::before, .hero::after {
+      content: "♡";
+      position: absolute;
+      color: #f7c5d0;
+      font-size: 54px;
+      opacity: .65;
+      transform: rotate(-13deg);
+    }
+    .hero::before { left: 7%; top: 20px; }
+    .hero::after { right: 8%; bottom: 4px; transform: rotate(13deg); }
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      padding: 6px 12px;
+      border-radius: 99px;
+      color: var(--pink-dark);
+      background: var(--pink-soft);
+      font-size: .78rem;
+      font-weight: 750;
+      letter-spacing: .04em;
+      text-transform: uppercase;
+    }
+    h1 {
+      margin: 13px 0 7px;
+      color: #684653;
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: clamp(2.3rem, 7vw, 4rem);
+      font-weight: 600;
+      letter-spacing: -.045em;
+      line-height: 1.1;
+    }
+    .hero p { max-width: 570px; margin: 0 auto; color: var(--muted); }
+    .hero .tiny { margin-top: 15px; color: #b17c8c; font-size: .88rem; }
+
+    .notice {
+      display: flex;
+      align-items: flex-start;
+      gap: 11px;
+      margin: 18px 0 22px;
+      padding: 14px 17px;
+      border: 1px solid #f4e0d8;
+      border-radius: 17px;
+      background: #fffaf5;
+      color: #775f57;
+      font-size: .91rem;
+    }
+    .notice strong { color: #986b70; }
+    .notice-icon { font-size: 1.2rem; line-height: 1.5; }
+
+    .toolbar {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 14px;
+    }
+    .progress-box {
+      flex: 1 1 220px;
+      padding: 13px 16px;
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      background: rgba(255,255,255,.8);
+    }
+    .progress-top { display: flex; justify-content: space-between; gap: 10px; margin-bottom: 8px; font-size: .85rem; }
+    .progress-top span:last-child { color: var(--pink-dark); font-weight: 750; }
+    .track { height: 8px; overflow: hidden; border-radius: 99px; background: #f8e9ec; }
+    .bar { width: 0%; height: 100%; border-radius: inherit; background: linear-gradient(90deg, #f2b0bf, #dd819c); transition: width .25s ease; }
+    .tools { display: flex; flex-wrap: wrap; gap: 8px; }
+    .btn {
+      min-height: 42px;
+      padding: 9px 14px;
+      border: 1px solid var(--line);
+      border-radius: 13px;
+      color: #765763;
+      background: white;
+      font-size: .88rem;
+      font-weight: 700;
+      transition: transform .15s ease, background .15s ease;
+    }
+    .btn:hover { transform: translateY(-1px); background: #fff5f7; }
+    .btn.primary { border-color: transparent; color: white; background: var(--pink); }
+    .btn.primary:hover { background: var(--pink-dark); }
+
+    .category-list { display: flex; gap: 8px; overflow-x: auto; padding: 5px 1px 12px; scrollbar-width: thin; }
+    .tab {
+      flex: 0 0 auto;
+      padding: 10px 14px;
+      border: 1px solid var(--line);
+      border-radius: 99px;
+      color: #876f79;
+      background: rgba(255,255,255,.8);
+      font-size: .88rem;
+      font-weight: 700;
+    }
+    .tab.active { border-color: #efb6c4; color: #a6506d; background: var(--pink-soft); }
+
+    .section-head { display: flex; align-items: end; justify-content: space-between; gap: 12px; margin: 15px 2px 13px; }
+    .section-head h2 { margin: 0; color: #714d5c; font-family: Georgia, serif; font-size: 1.65rem; font-weight: 600; }
+    .section-head p { margin: 3px 0 0; color: var(--muted); font-size: .9rem; }
+    .count { flex: 0 0 auto; color: #ad7a88; font-size: .8rem; font-weight: 700; }
+
+    .question-card {
+      margin: 12px 0;
+      padding: 19px;
+      border: 1px solid var(--line);
+      border-radius: 19px;
+      background: var(--paper);
+      box-shadow: 0 7px 22px rgba(143, 91, 108, .045);
+    }
+    .q-top { display: flex; align-items: flex-start; gap: 11px; margin-bottom: 14px; }
+    .q-number {
+      display: grid;
+      flex: 0 0 31px;
+      width: 31px;
+      height: 31px;
+      place-items: center;
+      border-radius: 11px;
+      color: var(--pink-dark);
+      background: var(--pink-soft);
+      font-size: .83rem;
+      font-weight: 800;
+    }
+    .q-text { flex: 1; padding-top: 2px; font-weight: 750; line-height: 1.45; }
+    .answered { color: var(--green); font-size: .75rem; font-weight: 750; white-space: nowrap; }
+    .answers { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+    .answer label { display: block; margin: 0 0 6px 2px; color: #987481; font-size: .8rem; font-weight: 750; }
+    textarea {
+      display: block;
+      width: 100%;
+      min-height: 92px;
+      resize: vertical;
+      padding: 11px 12px;
+      border: 1px solid #f0e2e5;
+      border-radius: 12px;
+      outline: none;
+      color: var(--ink);
+      background: #fffcfc;
+      font-size: .91rem;
+      line-height: 1.5;
+    }
+    textarea:focus { border-color: #e7a4b5; box-shadow: 0 0 0 3px rgba(233,143,165,.13); }
+    textarea::placeholder { color: #b9aab0; }
+
+    .bottom-note {
+      margin-top: 24px;
+      padding: 20px;
+      border: 1px dashed #e9bdc8;
+      border-radius: 18px;
+      text-align: center;
+      color: #896d78;
+      background: rgba(255,255,255,.65);
+    }
+    .bottom-note strong { display: block; margin-bottom: 4px; color: #9a5d72; font-family: Georgia, serif; font-size: 1.25rem; }
+    .save-status { min-height: 20px; margin-top: 8px; color: var(--green); font-size: .8rem; text-align: right; }
+    footer { margin-top: 22px; color: #ad9aa1; text-align: center; font-size: .78rem; }
+
+    @media (max-width: 650px) {
+      .wrap { width: min(100% - 20px, 560px); padding-top: 10px; }
+      .hero { padding: 33px 17px 26px; border-radius: 22px; }
+      .hero::before { left: 3%; top: 8px; font-size: 38px; }
+      .hero::after { right: 4%; font-size: 40px; }
+      .answers { grid-template-columns: 1fr; gap: 10px; }
+      .question-card { padding: 15px; }
+      .section-head { align-items: flex-start; }
+      .count { padding-top: 8px; }
+      .tools { width: 100%; }
+      .tools .btn { flex: 1; }
+    }
+    @media print {
+      body { background: white; }
+      .wrap { width: 100%; padding: 0; }
+      .hero, .question-card, .progress-box { box-shadow: none; }
+      .tools, .category-list, .notice, footer, .save-status { display: none !important; }
+      .question-card { break-inside: avoid; }
+      textarea { min-height: 65px; border-color: #ddd; background: white; }
+    }
+  </style>
+</head>
+<body>
+  <main class="wrap">
+    <header class="hero">
+      <span class="eyebrow">✿ a little space for us ✿</span>
+      <h1>Ruang Cerita</h1>
+      <p>Tempat untuk saling mengenal lebih dalam, mendengarkan tanpa menghakimi, dan merawat hubungan dengan komunikasi yang baik.</p>
+      <div class="tiny">pelan-pelan saja, yang penting saling terbuka ♡</div>
+    </header>
+
+    <aside class="notice">
+      <span class="notice-icon">🌷</span>
+      <div><strong>Rules</strong><br />Jawab bergantian, dengarkan sampai selesai, dan jangan saling menyalahkan. Kalian boleh melewati pertanyaan, meminta jeda, atau kembali membahasnya nanti. Tujuannya bukan mempertahankan hubungan dengan cara apa pun, tetapi membangun hubungan yang sehat dan sama-sama diinginkan.</div>
+    </aside>
+
+    <section class="toolbar" aria-label="Progress dan alat">
+      <div class="progress-box">
+        <div class="progress-top"><span>Perjalanan deep talk kalian</span><span id="progressText">0 / 28 berdua</span></div>
+        <div class="track"><div class="bar" id="progressBar"></div></div>
+      </div>
+      <div class="tools">
+        <button class="btn" id="downloadBtn" type="button">↓ Unduh catatan</button>
+        <button class="btn" id="printBtn" type="button">♡ Cetak</button>
+        <button class="btn" id="resetBtn" type="button">Reset</button>
+      </div>
+    </section>
+
+    <nav class="category-list" id="categoryTabs" aria-label="Kategori pertanyaan"></nav>
+
+    <section>
+      <div class="section-head">
+        <div><h2 id="categoryTitle">Awal & makna hubungan</h2><p id="categoryDescription">Mulai dari hal sederhana yang membuat kalian saling berarti.</p></div>
+        <span class="count" id="categoryCount">4 pertanyaan</span>
+      </div>
+      <div id="questions"></div>
+    </section>
+
+    <div class="save-status" id="saveStatus" aria-live="polite">Jawaban tersimpan otomatis di browser ini.</div>
+
+    <section class="bottom-note">
+      <strong>Hubungan yang baik dirawat berdua ♡</strong>
+      Tidak harus punya semua jawaban hari ini. Yang penting, kalian mau belajar memahami dan menghargai satu sama lain.
+    </section>
+    <footer>Ruang Kita · Catatan disimpan di browser/perangkat ini, bukan dikirim ke server.</footer>
+  </main>
+
+  <script>
+    const STORAGE_KEY = "ruang-kita-deeptalk-v1";
+    const categories = [
+      {
+        title: "Awal & makna hubungan", icon: "♡",
+        description: "Mulai dari hal sederhana yang membuat kalian saling berarti.",
+        questions: [
+          "Hal kecil apa yang membuatmu merasa dihargai dan disayangi?",
+          "Kapan kamu merasa paling nyaman menjadi diri sendiri saat bersama?",
+          "Menurutmu, seperti apa hubungan yang sehat dan menyenangkan?",
+          "Hal sederhana apa yang ingin lebih sering kita lakukan bersama?"
+        ]
+      },
+      {
+        title: "Komunikasi", icon: "💬",
+        description: "Belajar menyampaikan isi hati dan mendengarkan dengan baik.",
+        questions: [
+          "Bagaimana cara terbaik untuk menyampaikan sesuatu saat kamu sedang tidak baik-baik saja?",
+          "Apa yang membuatmu merasa benar-benar didengarkan?",
+          "Saat membutuhkan waktu sendiri, bagaimana kamu ingin menyampaikannya?",
+          "Apa topik yang terasa sulit dibicarakan, dan bagaimana kita bisa membahasnya dengan nyaman?"
+        ]
+      },
+      {
+        title: "Kepercayaan", icon: "🫶",
+        description: "Bicarakan rasa aman, kejujuran, dan hal yang membangun kepercayaan.",
+        questions: [
+          "Apa arti kepercayaan dalam hubungan menurutmu?",
+          "Sikap apa yang membuatmu merasa aman dalam hubungan?",
+          "Bagaimana kita menjaga privasi pribadi sekaligus tetap jujur satu sama lain?",
+          "Jika salah satu dari kita mengingkari janji, apa yang perlu dilakukan untuk memperbaikinya?"
+        ]
+      },
+      {
+        title: "Konflik & meminta maaf", icon: "☁️",
+        description: "Tidak harus selalu sepakat; yang penting tahu cara menyelesaikan masalah.",
+        questions: [
+          "Saat berbeda pendapat, sikap apa yang sebaiknya kita hindari?",
+          "Ketika sedang kesal, kamu lebih nyaman diberi waktu tenang atau langsung diajak bicara?",
+          "Seperti apa permintaan maaf yang terasa tulus bagimu?",
+          "Bagaimana cara kita mencari solusi tanpa menjadikan salah satu pihak sebagai musuh?"
+        ]
+      },
+      {
+        title: "Batasan & rasa hormat", icon: "🌷",
+        description: "Setiap orang punya batas pribadi yang perlu dihormati.",
+        questions: [
+          "Batas pribadi apa yang penting untuk selalu kita hormati?",
+          "Adakah hal yang belum siap kamu lakukan atau ceritakan? Kamu tidak harus menjelaskannya sekarang.",
+          "Bagaimana kita membagi waktu untuk hubungan, keluarga, teman, sekolah, dan diri sendiri?",
+          "Bagaimana caranya agar kita bisa berkata 'tidak' tanpa takut dimarahi atau membuat satu sama lain merasa bersalah?"
+        ]
+      },
+      {
+        title: "Dukungan & perhatian", icon: "☀️",
+        description: "Kenali cara saling mendukung tanpa mengambil alih kebutuhan masing-masing.",
+        questions: [
+          "Saat kamu sedang stres, kamu lebih membutuhkan teman bercerita, bantuan mencari solusi, atau waktu sendiri?",
+          "Apa bentuk perhatian yang kamu sukai, dan perhatian seperti apa yang justru kurang nyaman?",
+          "Bagaimana kita bisa saling mendukung saat salah satu sedang mengejar target atau menghadapi masa sulit?",
+          "Hal apa yang belakangan ini ingin kamu apresiasi dari satu sama lain?"
+        ]
+      },
+      {
+        title: "Harapan & evaluasi", icon: "✨",
+        description: "Lihat apakah harapan dan usaha kalian berjalan searah.",
+        questions: [
+          "Apa harapanmu untuk hubungan ini dalam beberapa bulan ke depan?",
+          "Apa satu hal yang ingin kamu perbaiki dari dirimu agar hubungan ini lebih sehat?",
+          "Menurutmu, tanda apa yang menunjukkan bahwa hubungan ini baik untuk kita berdua?",
+          "Jika suatu saat kebutuhan atau tujuan kita berbeda, bagaimana kita bisa membicarakannya dengan jujur dan saling menghormati?"
+        ]
+      }
+    ];
+
+    let answers = loadAnswers();
+    let activeCategory = 0;
+    const tabsEl = document.getElementById("categoryTabs");
+    const questionsEl = document.getElementById("questions");
+
+    function loadAnswers() {
+      try { return JSON.parse(localStorage.getItem(STORAGE_KEY)) || {}; }
+      catch { return {}; }
+    }
+
+    function saveAnswers() {
+      try {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(answers));
+        document.getElementById("saveStatus").textContent = "✓ Tersimpan otomatis di browser ini.";
+      } catch {
+        document.getElementById("saveStatus").textContent = "Penyimpanan browser tidak tersedia. Unduh catatan agar jawaban tidak hilang.";
+      }
+      updateProgress();
+    }
+
+    function questionId(categoryIndex, questionIndex) { return `${categoryIndex}-${questionIndex}`; }
+
+    function updateProgress() {
+      let completed = 0;
+      let total = 0;
+      categories.forEach((category, ci) => category.questions.forEach((_, qi) => {
+        total++;
+        const item = answers[questionId(ci, qi)] || {};
+        if ((item.a || "").trim() && (item.b || "").trim()) completed++;
+      }));
+      document.getElementById("progressText").textContent = `${completed} / ${total} berdua`;
+      document.getElementById("progressBar").style.width = `${(completed / total) * 100}%`;
+    }
+
+    function renderTabs() {
+      tabsEl.innerHTML = "";
+      categories.forEach((category, index) => {
+        const button = document.createElement("button");
+        button.type = "button";
+        button.className = `tab${index === activeCategory ? " active" : ""}`;
+        button.textContent = `${category.icon} ${category.title}`;
+        button.addEventListener("click", () => {
+          activeCategory = index;
+          renderTabs();
+          renderQuestions();
+        });
+        tabsEl.appendChild(button);
+      });
+    }
+
+    function renderQuestions() {
+      const category = categories[activeCategory];
+      document.getElementById("categoryTitle").textContent = category.title;
+      document.getElementById("categoryDescription").textContent = category.description;
+      document.getElementById("categoryCount").textContent = `${category.questions.length} pertanyaan`;
+      questionsEl.innerHTML = "";
+
+      category.questions.forEach((question, qi) => {
+        const id = questionId(activeCategory, qi);
+        const saved = answers[id] || { a: "", b: "" };
+        const isComplete = saved.a.trim() && saved.b.trim();
+        const card = document.createElement("article");
+        card.className = "question-card";
+
+        const top = document.createElement("div");
+        top.className = "q-top";
+        const number = document.createElement("span");
+        number.className = "q-number";
+        number.textContent = String(activeCategory * 4 + qi + 1).padStart(2, "0");
+        const text = document.createElement("div");
+        text.className = "q-text";
+        text.textContent = question;
+        const status = document.createElement("span");
+        status.className = "answered";
+        status.textContent = isComplete ? "✓ Berdua" : "";
+        top.append(number, text, status);
+
+        const answersWrap = document.createElement("div");
+        answersWrap.className = "answers";
+        const fields = [
+          { key: "a", label: "Jawaban kamu", placeholder: "Tulis jawabanmu di sini..." },
+          { key: "b", label: "Jawaban pasangan", placeholder: "Tulis jawaban pasangan di sini..." }
+        ];
+        fields.forEach(field => {
+          const holder = document.createElement("div");
+          holder.className = "answer";
+          const label = document.createElement("label");
+          label.textContent = field.label;
+          const area = document.createElement("textarea");
+          area.value = saved[field.key] || "";
+          area.placeholder = field.placeholder;
+          area.setAttribute("aria-label", `${field.label}: ${question}`);
+          area.addEventListener("input", () => {
+            if (!answers[id]) answers[id] = { a: "", b: "" };
+            answers[id][field.key] = area.value;
+            const complete = answers[id].a.trim() && answers[id].b.trim();
+            status.textContent = complete ? "✓ Berdua" : "";
+            saveAnswers();
+          });
+          holder.append(label, area);
+          answersWrap.appendChild(holder);
+        });
+        card.append(top, answersWrap);
+        questionsEl.appendChild(card);
+      });
+      updateProgress();
+    }
+
+    function downloadNotes() {
+      const lines = ["RUANG KITA — CATATAN DEEP TALK", "", "Catatan: jawaban tersimpan hanya di perangkat/browser ini.", ""];
+      categories.forEach((category, ci) => {
+        lines.push(category.title.toUpperCase());
+        lines.push(category.description);
+        category.questions.forEach((question, qi) => {
+          const item = answers[questionId(ci, qi)] || {};
+          lines.push(`\n${ci * 4 + qi + 1}. ${question}`);
+          lines.push(`Jawaban kamu: ${item.a || "(belum diisi)"}`);
+          lines.push(`Jawaban pasangan: ${item.b || "(belum diisi)"}`);
+        });
+        lines.push("\n----------------------------------------\n");
+      });
+      const blob = new Blob(["\ufeff" + lines.join("\n")], { type: "text/plain;charset=utf-8" });
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement("a");
+      link.href = url;
+      link.download = "catatan-deep-talk-ruang-kita.txt";
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+      URL.revokeObjectURL(url);
+    }
+
+    document.getElementById("downloadBtn").addEventListener("click", downloadNotes);
+    document.getElementById("printBtn").addEventListener("click", () => window.print());
+    document.getElementById("resetBtn").addEventListener("click", () => {
+      const confirmed = window.confirm("Hapus semua jawaban yang tersimpan di browser ini?");
+      if (!confirmed) return;
+      answers = {};
+      saveAnswers();
+      renderQuestions();
+    });
+
+    renderTabs();
+    renderQuestions();
+    updateProgress();
+  </script>
+</body>
+</html>
